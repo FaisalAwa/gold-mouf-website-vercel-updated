@@ -1,0 +1,156 @@
+/* App-level rules that inline styles can't express (media queries, hover).
+   Imported in main.tsx. !important is used only to beat inline defaults on
+   the responsive nav toggles. */
+
+/* ── Responsive nav ─────────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .gmd-nav-desktop { display: none !important; }
+  .gmd-nav-mobile { display: inline-flex !important; }
+  .gmd-nav-drawer { display: block !important; }
+}
+
+/* ── Shop nav mega-menu ──────────────────────────────────────────── */
+.gmd-shop-caret {
+  display: inline-block;
+  font-size: 10px;
+  transition: transform 0.2s var(--ease-ui);
+}
+.gmd-shop-menu-primary { transition: background 0.15s var(--ease-ui); }
+.gmd-shop-menu-item { transition: background 0.15s var(--ease-ui), border-color 0.15s var(--ease-ui); }
+@media (hover: hover) and (pointer: fine) {
+  .gmd-shop-menu-primary:hover { background: var(--c-accent-soft); }
+  .gmd-shop-menu-item:hover { background: var(--c-accent-soft); border-color: var(--c-accent-line); }
+}
+.gmd-shop-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+/* ── Product card hover ─────────────────────────────────────────── */
+.gmd-card { transition: transform 0.3s var(--ease-out); }
+@media (hover: hover) and (pointer: fine) {
+  .gmd-card:hover { transform: translateY(-4px); }
+  .gmd-card .gmd-media-img { transition: transform 0.5s var(--ease-out); }
+  .gmd-card:hover .gmd-media-img { transform: scale(1.05); }
+  .gmd-tooth:hover rect { stroke: var(--c-accent) !important; }
+}
+
+/* ── Utility: hairline section divider ──────────────────────────── */
+.gmd-rule { height: 1px; background: var(--c-line); border: 0; }
+
+/* ── JewlX embeds (grill builder / custom enquiry / instant quote) ─
+   Matches JewlX's own embed CSS so their postMessage resize logic
+   (see JewlxEmbed.tsx) lines up with what actually renders. */
+.gmd-jewlx-embed {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+.gmd-jewlx-embed iframe {
+  width: 100%;
+  height: 800px;
+  min-height: 500px;
+  border: none;
+  display: block;
+  transition: height 0.3s ease, opacity 0.4s var(--ease-out);
+  opacity: 0;
+}
+.gmd-jewlx-embed iframe.is-loaded { opacity: 1; }
+@media (max-width: 767px) {
+  .gmd-jewlx-embed iframe {
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+    transition: opacity 0.4s var(--ease-out);
+  }
+}
+@media (min-width: 768px) {
+  .gmd-jewlx-embed iframe {
+    min-height: 500px;
+    max-height: 4000px;
+  }
+}
+
+/* Loading state — shown until the vendor's first postMessage (or the
+   timeout fallback in JewlxEmbed.tsx) signals the widget has painted. */
+.gmd-jewlx-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: var(--c-bg);
+  opacity: 1;
+  transition: opacity 0.35s var(--ease-out);
+  pointer-events: none;
+}
+.gmd-jewlx-loading.is-hidden { opacity: 0; }
+.gmd-jewlx-spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--c-line);
+  border-top-color: var(--c-accent);
+  animation: gmd-jewlx-spin 0.8s linear infinite;
+}
+.gmd-jewlx-loading-text {
+  font-family: var(--f-head);
+  font-size: var(--t-small);
+  letter-spacing: 0.04em;
+  color: var(--c-ink-muted);
+}
+@keyframes gmd-jewlx-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Focus visibility ───────────────────────────────────────────── */
+a:focus-visible, button:focus-visible, [role='button']:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ── Catchphrase marquee ────────────────────────────────────────── */
+.gmd-marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  will-change: transform;
+  animation-name: gmd-marquee;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes gmd-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ── Live-metals ticker: same seamless-loop technique, brisker pace,
+   right → left (the standard ticker direction) — runs on every device,
+   since it's a pure CSS animation independent of Lenis/GSAP. ────────── */
+.gmd-ticker-track {
+  display: inline-flex;
+  white-space: nowrap;
+  will-change: transform;
+  animation: gmd-marquee 26s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .gmd-marquee-track, .gmd-ticker-track { animation: none; transform: none; }
+}
+
+/* ── Mobile section separation ──────────────────────────────────────
+   On small screens, adjacent light/soft sections blend together (near-
+   white vs faint-grey). A crisp hairline at each section boundary makes
+   every section read as its own block. Theme-agnostic grey so it shows
+   on both light and dark sections. Desktop is untouched. */
+@media (max-width: 767px) {
+  main > section { border-top: 1px solid rgba(128, 128, 128, 0.32); }
+  main > section:first-child { border-top: none; }
+  /* Make "soft" sections clearly distinct from near-white ones on mobile so
+     consecutive sections visibly alternate instead of blending together. */
+  .gmd-section--soft { background: #F2F2F3 !important; }
+}

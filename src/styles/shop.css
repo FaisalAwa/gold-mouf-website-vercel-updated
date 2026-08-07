@@ -1,0 +1,47 @@
+/* Shop (PLP) — grid + filter responsiveness. Imported at the top of Shop.tsx.
+   Mobile-first: 2-col → 3-col tablet → 4-col desktop. */
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-xs);
+}
+@media (min-width: 680px) {
+  .shop-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .shop-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.shop-chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(122px, 1fr)); gap: 8px; }
+.shop-chip {
+  transition: background 0.2s var(--ease-ui), border-color 0.2s var(--ease-ui), color 0.2s var(--ease-ui);
+}
+@media (hover: hover) and (pointer: fine) {
+  .shop-chip:hover { border-color: var(--c-accent-line); color: var(--c-accent-deep); }
+}
+
+.shop-controls { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; }
+
+.shop-select {
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: var(--f-head);
+  font-size: var(--t-small);
+  font-weight: 600;
+  color: var(--c-ink);
+  background-color: var(--c-surface);
+  border: 1px solid var(--c-line-strong);
+  border-radius: var(--radius-sm);
+  padding: 9px 32px 9px 12px;
+  cursor: pointer;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="%23141414" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+}
+.shop-select:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+
+.shop-crumb { text-decoration: none; }
+@media (hover: hover) and (pointer: fine) {
+  .shop-crumb:hover { text-decoration: underline; }
+}

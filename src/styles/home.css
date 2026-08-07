@@ -1,0 +1,454 @@
+/* ═══════════════════════════════════════════════════════════════
+   HOME — media queries + the one signature motion moment.
+   Owns only .gmd-home-* / .gmd-hero-* / .gmd-preset-* / .gmd-cat-*
+   classes. Reduced-motion is neutralized globally in tokens.css.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── HERO: interactive 3D grill (dark, full-width) ─────────────── */
+.gmd-hero3d-section {
+  position: relative;
+  background: var(--c-dark-2);
+  color: var(--c-on-dark);
+  /* the hero fills exactly one screen (under the ticker + nav) */
+  min-height: calc(100svh - var(--ticker-h) - var(--nav-h));
+  display: flex;
+  align-items: center;
+  padding: clamp(40px, 8vh, 96px) 0;
+  overflow: hidden;
+}
+
+/* the grill canvas/poster fills the entire hero as a living backdrop */
+.gmd-hero3d-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  /* soft glow lifts the chrome necklace off pure black — centered */
+  background: radial-gradient(50% 60% at 50% 46%, rgba(128, 132, 140, 0.22), rgba(0, 0, 0, 0) 72%);
+}
+/* legibility scrim: darkest behind the centered copy, fading toward the
+   edges so the slide still reads through top/bottom and the sides */
+.gmd-hero3d-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(58% 60% at 50% 48%, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.34) 55%, rgba(0, 0, 0, 0) 82%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.68) 0%, rgba(0, 0, 0, 0) 36%, rgba(0, 0, 0, 0) 64%, rgba(0, 0, 0, 0.5) 100%);
+}
+.gmd-hero3d-copy {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: clamp(620px, 62vw, 880px);
+  margin: 0 auto;
+  box-sizing: border-box;
+  text-align: center;
+  /* a single unbroken word (e.g. "SIGNATURE") at the fluid hero size can
+     outrun the viewport on narrow phones — break it instead of overflowing */
+  overflow-wrap: break-word;
+  word-break: break-word;
+  /* keeps copy legible when bright chrome rotates behind it */
+  text-shadow: 0 2px 22px rgba(0, 0, 0, 0.72), 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+.gmd-hero3d-copy .gmd-btn-row,
+.gmd-hero3d-copy .gmd-hero3d-live {
+  justify-content: center;
+}
+.gmd-hero3d-copy .gmd-hero3d-sub {
+  margin-left: auto;
+  margin-right: auto;
+}
+.gmd-hero3d-sub {
+  margin-top: var(--s-xs);
+  font-size: var(--t-sub);
+  color: var(--c-on-dark-muted);
+  max-width: 560px;
+  line-height: 1.6;
+}
+.gmd-hero3d-badge {
+  margin-top: 14px;
+  font-size: var(--t-small);
+  letter-spacing: 0.16em;
+  color: var(--c-accent);
+}
+.gmd-hero3d-live {
+  margin-top: var(--s-sm);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--t-small);
+  color: var(--c-on-dark-muted);
+  font-variant-numeric: tabular-nums;
+}
+.gmd-hero3d-live b { color: var(--c-on-dark); font-weight: 700; }
+.gmd-hero3d-live .gmd-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--c-accent);
+  display: inline-block;
+}
+.gmd-hero3d-live-sep { opacity: 0.45; }
+
+.gmd-hero3d-stage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.gmd-hero3d-stage canvas { display: block; }
+.gmd-hero3d-poster {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.gmd-hero3d-poster img {
+  width: 100%;
+  max-width: 680px;
+  height: auto;
+}
+/* one-time chrome sheen across the static poster */
+.gmd-hero3d-poster-sheen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 55%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(201, 204, 209, 0.28) 48%,
+    rgba(244, 244, 245, 0.2) 54%,
+    transparent 72%
+  );
+  mix-blend-mode: screen;
+  transform: translateX(-140%) skewX(-12deg);
+  animation: gmd-hero-shine 1.2s var(--ease-out) 0.6s 1 both;
+}
+.gmd-hero3d-hint {
+  position: absolute;
+  bottom: 16px;
+  right: 24px;
+  z-index: 2;
+  font-family: var(--f-head);
+  font-size: var(--t-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-on-dark-muted);
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+/* ── Hero slider: autoplaying crossfade backdrop ────────────────── */
+.gmd-hero-slider {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.gmd-hero-slider-slide {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.gmd-hero-slider-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  will-change: transform, opacity;
+  /* source shots are already near-black studio photography; just a light
+     trim so the lightest sparkle highlights don't fight the hero copy */
+  filter: brightness(0.85) contrast(1.05);
+}
+.gmd-hero-slider-dots {
+  position: absolute;
+  z-index: 2;
+  bottom: 20px;
+  right: 24px;
+  display: flex;
+  gap: 8px;
+}
+.gmd-hero-slider-dots button {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(245, 245, 245, 0.4);
+  cursor: pointer;
+  transition: background 0.25s var(--ease-ui), transform 0.25s var(--ease-ui);
+}
+.gmd-hero-slider-dots button:hover { background: rgba(245, 245, 245, 0.7); }
+.gmd-hero-slider-dots button.is-active {
+  background: var(--c-accent);
+  transform: scale(1.35);
+}
+
+/* catchphrase swap keeps a stable box so nothing jumps as text changes */
+.gmd-hero3d-badge {
+  min-height: 1.4em;
+}
+
+/* ── Hero: asymmetric, never centered ──────────────────────────── */
+.gmd-home-hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-sm);
+  align-items: center;
+}
+@media (min-width: 920px) {
+  .gmd-home-hero {
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+    gap: clamp(36px, 5vw, 84px);
+  }
+}
+
+/* Signature: chrome shine sweeps across the tooth-map panel once on load. */
+.gmd-hero-panel { position: relative; overflow: hidden; }
+.gmd-hero-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 55%;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(201, 204, 209, 0.30) 48%,
+    rgba(244, 244, 245, 0.20) 54%,
+    transparent 72%
+  );
+  mix-blend-mode: screen;
+  transform: translateX(-140%) skewX(-12deg);
+  animation: gmd-hero-shine 1.2s var(--ease-out) 0.6s 1 both;
+}
+@keyframes gmd-hero-shine {
+  0%   { transform: translateX(-140%) skewX(-12deg); opacity: 0; }
+  16%  { opacity: 1; }
+  100% { transform: translateX(220%) skewX(-12deg); opacity: 0; }
+}
+
+/* small live pulse dot */
+.gmd-live-dot { animation: gmd-live-pulse 2.4s var(--ease-ui) infinite; }
+@keyframes gmd-live-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* ── Category trio ─────────────────────────────────────────────── */
+.gmd-home-trio {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-xs);
+}
+@media (min-width: 760px) {
+  .gmd-home-trio { grid-template-columns: repeat(3, 1fr); }
+}
+/* grills tile media (builder-led, no product photo) */
+.gmd-trio-media {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--c-dark);
+}
+.gmd-trio-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ── Builder band ──────────────────────────────────────────────── */
+.gmd-home-builder {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-sm);
+  align-items: stretch;
+}
+@media (min-width: 860px) {
+  .gmd-home-builder {
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(28px, 4vw, 64px);
+  }
+}
+.gmd-preset-row { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* interactive grill inside the "Design your own grill" preview stage */
+.gmd-builder-grill {
+  position: relative;
+  width: 100%;
+  height: clamp(240px, 32vh, 360px);
+  margin: 0 auto;
+}
+
+/* ── Bestsellers grid ──────────────────────────────────────────── */
+.gmd-home-grid4 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--s-xs);
+}
+@media (min-width: 900px) {
+  .gmd-home-grid4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ── Shop-by-category tiles ────────────────────────────────────── */
+.gmd-home-cats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+@media (min-width: 620px) { .gmd-home-cats { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 980px) { .gmd-home-cats { grid-template-columns: repeat(6, 1fr); } }
+
+.gmd-cat-tile { transition: border-color 0.2s var(--ease-ui), background 0.2s var(--ease-ui); }
+.gmd-cat-arrow { transition: transform 0.2s var(--ease-out), color 0.2s var(--ease-ui); }
+@media (hover: hover) and (pointer: fine) {
+  .gmd-cat-tile:hover { border-color: var(--c-accent-line); background: var(--c-accent-soft); }
+  .gmd-cat-tile:hover .gmd-cat-arrow { transform: translateX(4px); color: var(--c-accent-deep); }
+}
+
+/* ── Testimonials ──────────────────────────────────────────────── */
+.gmd-home-quotes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-xs);
+}
+@media (min-width: 720px) { .gmd-home-quotes { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px) { .gmd-home-quotes { grid-template-columns: repeat(3, 1fr); } }
+
+/* ── Shared button row ─────────────────────────────────────────── */
+.gmd-btn-row { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* Signature-pieces feature block (brief homepage priority) */
+.gmd-home-signature { display: grid; grid-template-columns: 1fr; gap: var(--s-md); align-items: center; }
+.gmd-home-signature-cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-xs); }
+@media (min-width: 900px) {
+  .gmd-home-signature { grid-template-columns: 0.9fr 1.1fr; gap: var(--s-lg); }
+}
+
+/* ── GrillReveal: 3D scroll-driven signature moment ────────────── */
+/* Mobile-first: static, already-revealed grill + hooks stacked in flow.
+   The desktop block below adds the pinned 100vh stage + 3D perspective. */
+.gmd-grill {
+  background: var(--c-dark-2);
+  color: var(--c-on-dark);
+  padding: var(--s-lg) 0;
+  overflow: hidden;               /* clip the light-sweep + any 3D overflow */
+}
+.gmd-grill-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-sm);
+  text-align: center;
+}
+.gmd-grill-head { max-width: 620px; }
+
+.gmd-grill-viewport {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.gmd-grill-3d {
+  position: relative;
+  overflow: hidden;               /* keeps the sweep inside the grill bounds */
+  width: 100%;
+  max-width: 460px;
+}
+.gmd-grill-sweep {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 62%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;                     /* stays invisible unless GSAP drives it */
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(201, 204, 209, 0.45) 47%,
+    rgba(244, 244, 245, 0.40) 53%,
+    transparent 72%
+  );
+  mix-blend-mode: screen;
+}
+
+.gmd-grill-panels {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-sm);
+}
+.gmd-grill-panel { max-width: 560px; }
+.gmd-grill-step {
+  display: block;
+  font-family: var(--f-head);
+  font-size: var(--t-label);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+.gmd-grill-hook {
+  margin-top: 12px;
+  font-size: var(--t-h3);
+  line-height: 1.12;
+  color: var(--c-on-dark);
+}
+.gmd-grill-sub {
+  margin-top: 10px;
+  font-size: var(--t-sub);
+  line-height: 1.6;
+  color: var(--c-on-dark-muted);
+}
+
+/* Interactive grill model + steps (moved off the hero) */
+.gmd-grill-lead {
+  margin: 14px auto 0;
+  font-size: var(--t-sub);
+  line-height: 1.6;
+  color: var(--c-on-dark-muted);
+  max-width: 520px;
+}
+.gmd-grill-stage {
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  height: clamp(300px, 42vh, 480px);
+  margin: 0 auto;
+}
+.gmd-grill-steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-sm);
+  width: 100%;
+  max-width: 920px;
+  text-align: left;
+}
+@media (min-width: 760px) {
+  .gmd-grill-steps { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Desktop (fine pointer): pinned full-height stage, 3D perspective, and
+   the three panels absolute-stacked so they cross-fade in place. */
+@media (min-width: 768px) and (pointer: fine) {
+  .gmd-grill {
+    min-height: 100vh;
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+  .gmd-grill-inner { gap: var(--s-md); }
+  .gmd-grill-viewport { perspective: 1200px; }
+  .gmd-grill-panels {
+    display: block;
+    min-height: 150px;
+  }
+  .gmd-grill-panel {
+    position: absolute;
+    inset: 0;
+    margin: 0 auto;
+  }
+}

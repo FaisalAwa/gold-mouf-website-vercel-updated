@@ -1,0 +1,126 @@
+/* ═══════════════════════════════════════════════════════════════
+   STORY — hero band. Exactly one viewport, offset for the fixed
+   ticker + nav so it never sits underneath them.
+   ═══════════════════════════════════════════════════════════════ */
+.gmd-story-hero {
+  min-height: 100svh;
+  padding-top: calc(var(--ticker-h) + var(--nav-h) + var(--s-xs)) !important;
+  padding-bottom: var(--s-sm) !important;
+}
+.gmd-story-hero__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-xs);
+  align-items: center;
+}
+@media (min-width: 920px) {
+  .gmd-story-hero__grid {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(36px, 5vw, 84px);
+  }
+}
+.gmd-story-hero__body {
+  font-size: var(--t-sub);
+}
+.gmd-story-hero__media {
+  aspect-ratio: 4 / 5;
+}
+/* Below the two-column breakpoint the photo stacks under the copy — cap its
+   height (instead of letting it scale 4:5 with the full container width) so
+   the two blocks together still fit inside one screen. */
+@media (max-width: 919px) {
+  .gmd-story-hero__media { aspect-ratio: auto; height: min(30vh, 300px); }
+}
+@media (max-width: 560px) {
+  .gmd-story-hero__body { font-size: 13.5px; line-height: 1.55 !important; }
+  .gmd-story-hero__meta p:first-child { margin-top: 10px !important; }
+  .gmd-story-hero__meta p:last-child { margin-top: var(--s-xs) !important; font-size: var(--t-body) !important; }
+  .gmd-story-hero__media { height: min(22vh, 220px); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STORY — full-bleed maker video band ("Straight from the bench").
+   One muted, looping clip of the work in the shop fills the section
+   as a background; converting catchphrases + CTAs sit on top.
+   ═══════════════════════════════════════════════════════════════ */
+.gmd-story-craft {
+  position: relative;
+  overflow: hidden;
+  background: var(--c-dark-2);
+  color: var(--c-on-dark);
+  height: 100svh;
+  max-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s-lg) 0;
+}
+@media (max-width: 640px) {
+  .gmd-story-craft { padding: var(--s-md) 0; }
+  .gmd-story-craft__title { margin-top: 10px; }
+  .gmd-story-craft__lines { gap: 8px; margin-top: var(--s-xs); }
+  .gmd-story-craft__cta { margin-top: var(--s-xs); }
+}
+.gmd-story-craft__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+/* centered vignette — content now sits center-stage, so the dark cushion
+   needs to sit under it everywhere instead of skewed to one side */
+.gmd-story-craft__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 68% at 50% 48%, rgba(0, 0, 0, 0.74) 0%, rgba(0, 0, 0, 0.5) 55%, rgba(0, 0, 0, 0.22) 100%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.15) 38%, rgba(0, 0, 0, 0.15) 62%, rgba(0, 0, 0, 0.55) 100%);
+}
+.gmd-story-craft__inner {
+  position: relative;
+  z-index: 2;
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.gmd-story-craft__title {
+  margin: 14px 0 0;
+  font-size: clamp(32px, 6vw, 94px);
+  line-height: 0.98;
+  color: var(--c-on-dark);
+  letter-spacing: -0.01em;
+}
+.gmd-story-craft__lines {
+  margin: var(--s-sm) 0 0;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  max-width: 520px;
+  list-style: none;
+  padding: 0;
+}
+.gmd-story-craft__lines li {
+  text-align: center;
+  font-family: var(--f-display);
+  font-stretch: 125%;
+  font-variation-settings: 'wdth' 125;
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: clamp(13px, 1.5vw, 19px);
+  letter-spacing: 0.01em;
+  color: var(--c-on-dark);
+}
+.gmd-story-craft__cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: var(--s-md);
+}

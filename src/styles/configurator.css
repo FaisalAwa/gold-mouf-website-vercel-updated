@@ -1,0 +1,110 @@
+/* ═══════════════════════════════════════════════════════════════
+   Custom Grill Builder — layout, responsive, sticky price.
+   Colors / spacing / type come from tokens.css. This file is only
+   layout + media queries + focus rings (no raw color values for UI).
+   ═══════════════════════════════════════════════════════════════ */
+
+.cfg-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Photoreal grill hero on the dark stage — the "what a full set looks like". */
+.cfg-hero {
+  width: 100%;
+  max-width: 620px;
+  margin: var(--s-sm) auto 0;
+}
+.cfg-hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.cfg-hero figcaption {
+  margin-top: 10px;
+  font-size: var(--t-label);
+  letter-spacing: 0.03em;
+  color: var(--c-on-dark-muted);
+}
+
+.cfg-map-frame {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: var(--s-sm) auto 0;
+}
+/* soft chrome-silver glow behind the arch on the dark stage */
+.cfg-map-frame::before {
+  content: '';
+  position: absolute;
+  inset: 6% 4%;
+  background: radial-gradient(58% 52% at 50% 46%, var(--c-accent-soft), transparent 72%);
+  pointer-events: none;
+  z-index: 0;
+}
+.cfg-map {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.cfg-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-sm);
+  align-items: start;
+}
+.cfg-col { display: flex; flex-direction: column; gap: var(--s-sm); }
+.cfg-group { display: flex; flex-direction: column; gap: var(--s-xs); }
+.cfg-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.cfg-chip { -webkit-tap-highlight-color: transparent; }
+.cfg-chip:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+.gmd-tooth:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 1px; }
+
+.cfg-price {
+  border-radius: var(--radius-md);
+  background: var(--c-accent);
+  color: var(--c-ink);
+  padding: var(--s-xs);
+  border: 1px solid var(--c-accent-deep);
+}
+.cfg-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-size: var(--t-small);
+}
+
+.cfg-steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-sm);
+}
+
+@media (min-width: 720px) {
+  .cfg-steps { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Desktop: two-column builder, price sticks below the fixed chrome. */
+@media (min-width: 960px) {
+  .cfg-grid { grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.9fr); gap: var(--s-md); }
+  .cfg-price { position: sticky; top: calc(var(--ticker-h) + var(--nav-h) + 20px); }
+}
+
+/* Mobile: price rides the bottom of the viewport as a live bar. */
+@media (max-width: 959px) {
+  .cfg-price {
+    position: sticky;
+    bottom: 0;
+    z-index: 40;
+    box-shadow: var(--shadow-pop);
+  }
+}

@@ -1,0 +1,204 @@
+/* ═══════════════════════════════════════════════════════════════
+   Interactions — site-wide hover life + motion polish.
+   Gray/outline buttons grow and fill black left→right on hover; cards
+   lift; grill showcases get a chrome sheen. GPU-only (transform/opacity),
+   reduced-motion safe. Loaded after app.css so it wins.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Buttons: a shell we can wipe a fill across ─────────────────── */
+.gmd-btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  will-change: transform;
+  transform-origin: center;
+}
+.gmd-btn__label {
+  position: relative;
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+.gmd-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--c-ink);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Gray / outline buttons: grow 1.2x + fill BLACK left→right, text → white */
+.gmd-btn--ghost:hover,
+.gmd-btn--ghost:focus-visible {
+  transform: scale(1.1);
+  border-color: var(--c-ink) !important;
+}
+.gmd-btn--ghost:hover::before,
+.gmd-btn--ghost:focus-visible::before {
+  transform: scaleX(1);
+}
+.gmd-btn--ghost:hover .gmd-btn__label,
+.gmd-btn--ghost:focus-visible .gmd-btn__label {
+  color: var(--c-white);
+}
+
+/* Outline buttons on dark panels: fill WHITE (black would vanish on black) */
+.gmd-btn--ghost-dark::before {
+  background: var(--c-white);
+}
+.gmd-btn--ghost-dark:hover,
+.gmd-btn--ghost-dark:focus-visible {
+  transform: scale(1.1);
+  border-color: var(--c-white) !important;
+}
+.gmd-btn--ghost-dark:hover::before,
+.gmd-btn--ghost-dark:focus-visible::before {
+  transform: scaleX(1);
+}
+.gmd-btn--ghost-dark:hover .gmd-btn__label,
+.gmd-btn--ghost-dark:focus-visible .gmd-btn__label {
+  color: var(--c-ink);
+}
+
+/* Solid (black) buttons: kept calm — no fill, no scale (per feedback) */
+.gmd-btn--solid::before {
+  display: none;
+}
+
+/* Accent buttons read as gray/silver → same grow + black left→right fill */
+.gmd-btn--accent:hover,
+.gmd-btn--accent:focus-visible {
+  transform: scale(1.1);
+}
+.gmd-btn--accent:hover::before,
+.gmd-btn--accent:focus-visible::before {
+  transform: scaleX(1);
+}
+.gmd-btn--accent:hover .gmd-btn__label,
+.gmd-btn--accent:focus-visible .gmd-btn__label {
+  color: var(--c-white);
+}
+
+/* ── Chips (presets / metal / finish / filters): grow + darken ──── */
+.cfg-chip,
+.gmd-preset-row button,
+.gmd-fill {
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), background 0.25s ease,
+    color 0.25s ease, border-color 0.25s ease;
+  will-change: transform;
+}
+.cfg-chip:hover,
+.gmd-preset-row button:hover,
+.gmd-fill:hover {
+  transform: scale(1.12);
+  border-color: var(--c-ink) !important;
+}
+
+/* ── Cards: lift on hover ───────────────────────────────────────── */
+.gmd-card,
+.gmd-cat-tile,
+.gmd-trio-media,
+.gmd-product-card {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+  will-change: transform;
+}
+.gmd-card:hover,
+.gmd-product-card:hover {
+  transform: translateY(-6px);
+}
+.gmd-cat-tile:hover {
+  transform: translateY(-4px);
+  border-color: var(--c-ink) !important;
+}
+.gmd-cat-tile:hover .gmd-cat-arrow {
+  transform: translateX(4px);
+  color: var(--c-accent-deep);
+}
+.gmd-cat-arrow {
+  display: inline-block;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Media inside cards zooms gently under the card's hover */
+.gmd-card .gmd-trio-media img,
+.gmd-card img {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.gmd-card:hover img {
+  transform: scale(1.05);
+}
+
+/* ── Grill showcase: chrome sheen sweep on a photoreal grill image ── */
+.gmd-grill-photo {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+}
+.gmd-grill-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.gmd-grill-photo--sheen::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.28),
+    transparent
+  );
+  transform: skewX(-18deg);
+  animation: gmd-sheen 5.5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes gmd-sheen {
+  0%,
+  62% {
+    left: -60%;
+  }
+  85%,
+  100% {
+    left: 130%;
+  }
+}
+
+/* Live pulse dot (silver readout, "live" badges) */
+@keyframes gmd-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.7);
+  }
+}
+.gmd-live-dot {
+  animation: gmd-pulse 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gmd-grill-photo--sheen::after {
+    animation: none;
+    display: none;
+  }
+  .gmd-live-dot {
+    animation: none;
+  }
+  .gmd-btn:hover,
+  .gmd-card:hover,
+  .cfg-chip:hover,
+  .gmd-cat-tile:hover,
+  .gmd-preset-row button:hover {
+    transform: none;
+  }
+}

@@ -1,0 +1,105 @@
+/* ═══════════════════════════════════════════════════════════════
+   GOLD MOUF DOG — Design Tokens
+   Grounded in _workspace/BUILD-SPEC-R4.md (strict monochrome).
+   Whole UI = black / white / grey. Single accent = chrome-silver / graphite.
+   No beige, no gold, no warm tones. Hairlines over shadows.
+   NOTE: globals.css (do-not-touch) sets body bg/text/font from the legacy
+   names --c-void / --c-text / --f-body / --t-body — aliased below to the
+   light-canvas values so the page renders light.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ─── Palette — strict black / white / grey (chrome-silver accent) ─ */
+  --c-bg:         #FFFFFF;                 /* canvas (pure white) */
+  --c-surface:    #FFFFFF;                 /* raised cards/panels */
+  --c-surface-2:  #F2F2F3;                 /* neutral-grey fill (chips, insets) */
+  --c-ink:        #0A0A0A;                 /* primary text */
+  --c-ink-muted:  rgba(10,10,10,0.58);     /* captions, specs, secondary nav */
+  --c-ink-faint:  rgba(10,10,10,0.36);     /* tertiary hints */
+  --c-line:       rgba(10,10,10,0.12);     /* hairlines / dividers */
+  --c-line-strong:rgba(10,10,10,0.20);
+
+  --c-dark:       #0A0A0A;                 /* dark drama sections + top ticker */
+  --c-dark-2:     #000000;                 /* deepest dark (builder stage) */
+  --c-on-dark:    #F4F4F5;                 /* light text on dark */
+  --c-on-dark-muted: rgba(244,244,245,0.62);
+  --c-on-dark-line:  rgba(244,244,245,0.14);
+
+  --c-accent:     #8A8A90;                 /* chrome-silver — SINGLE accent */
+  --c-accent-deep:#2E2E32;                 /* graphite — accent hover/pressed */
+  --c-accent-soft:rgba(138,138,144,0.14);  /* accent wash / active filter bg */
+  --c-accent-line:rgba(138,138,144,0.40);
+
+  --c-silver:     #C9CCD1;                 /* silver metal cue */
+  --c-silver-deep:#9AA0A8;
+  --c-up:         #F4F4F5;                 /* ticker up-tick (monochrome) */
+  --c-down:       rgba(244,244,245,0.55);  /* ticker down-tick (monochrome) */
+
+  /* ─── Legacy aliases (globals.css body rule) ─────────────────── */
+  --c-void:  var(--c-bg);
+  --c-text:  var(--c-ink);
+  --c-white: #FFFFFF;
+  --c-muted: var(--c-ink-muted);
+
+  /* ─── Typography ──────────────────────────────────────────────── */
+  --f-display: 'Archivo', system-ui, sans-serif;   /* used at font-stretch:125% (expanded) */
+  --f-head:    'Archivo', system-ui, sans-serif;
+  --f-body:    'Inter', system-ui, sans-serif;
+
+  /* Type scale — fluid, clamp-based */
+  --t-hero:  clamp(44px, 8vw, 132px);
+  --t-h1:    clamp(34px, 5vw, 82px);
+  --t-h2:    clamp(24px, 3.4vw, 54px);
+  --t-h3:    clamp(19px, 2vw, 30px);
+  --t-sub:   clamp(15px, 1.4vw, 19px);
+  --t-body:  clamp(14px, 1vw, 16px);
+  --t-small: clamp(12px, 0.9vw, 13px);
+  --t-label: clamp(10px, 0.78vw, 11.5px);
+
+  /* ─── Spacing ─────────────────────────────────────────────────── */
+  --s-xs:   clamp(14px, 2vw, 24px);
+  --s-sm:   clamp(28px, 4vw, 48px);
+  --s-md:   clamp(52px, 7vw, 92px);
+  --s-lg:   clamp(76px, 10vw, 132px);
+  --gutter: clamp(20px, 4vw, 72px);
+  --max-w:  1360px;
+
+  /* ─── Form ────────────────────────────────────────────────────── */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-pill: 999px;
+  --shadow-card: 0 1px 2px rgba(10,10,10,0.04), 0 8px 28px -18px rgba(10,10,10,0.22);
+  --shadow-pop:  0 20px 60px -22px rgba(10,10,10,0.35);
+
+  /* ─── Motion ──────────────────────────────────────────────────── */
+  --ease-out:  cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-ui:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-expo: cubic-bezier(0.87, 0, 0.13, 1);
+  --dur-fast: 0.2s;
+  --dur-mid:  0.4s;
+  --dur-slow: 0.6s;
+
+  /* layout helpers */
+  --nav-h: 64px;
+  --ticker-h: 34px;
+}
+
+/* Display headings use the Expanded width axis of the Archivo variable font. */
+.font-display {
+  font-family: var(--f-display);
+  font-stretch: 125%;
+  font-variation-settings: 'wdth' 125;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+.font-head { font-family: var(--f-head); }
+.font-body { font-family: var(--f-body); }
+
+/* Respect reduced motion globally for CSS-driven effects. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
