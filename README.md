@@ -41,11 +41,13 @@ generated.
 
 Photos are matched to SKUs by filename, not by a mapping table:
 
-    public/assets/products/<category>/<sku lowercased>.webp
+    public/assets/products/<category>/<sku lowercased>.<webp|jpg|jpeg|png>
 
 with extra angles suffixed `-2`, `-3`, `-4`. Drop a correctly named file in and
 the next `npm run catalog` picks it up; a SKU with no file renders the branded
-placeholder and is tagged `needs-photography` in Shopify.
+placeholder and is tagged `needs-photography` in Shopify. `webp` wins when a SKU
+has more than one format on disk, but any of the four is accepted so a client
+can hand over whatever the camera produced.
 
 The import is idempotent on product handle, so re-run it whenever the sheet
 changes. It also writes `src/data/shopify-variants.json`, the SKU → variant map

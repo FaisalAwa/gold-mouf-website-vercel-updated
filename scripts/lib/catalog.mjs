@@ -37,25 +37,42 @@ const LAB = { finish: 'Iced (Lab Diamond)', stones: 'F-G Color VS1-VS2 lab-grown
 /* ── Photography ────────────────────────────────────────────────
    Product photos are named after the SKU they show:
 
-     public/assets/products/<category>/<sku lowercased>.webp
+     public/assets/products/<category>/<sku lowercased>.<ext>
 
    with extra angles suffixed -2, -3, -4. That convention is why this
-   file carries no photo mapping: drop `gmd-er-ld-hex-rg103.webp` into
+   file carries no photo mapping: drop `gmd-er-ld-hex-rg103.jpeg` into
    the earrings folder and that SKU picks it up on the next build. A
-   SKU with no matching file renders the branded placeholder instead. */
+   SKU with no matching file renders the branded placeholder instead.
 
-const photoPath = (category, name) => `/assets/products/${category}/${name}.webp`
+   Any of EXTENSIONS will do, so a client can hand over whatever the
+   camera or phone produced. webp is tried first — when both exist for
+   one SKU the smaller modern file wins — and the rest are accepted
+   as-is rather than silently ignored. Shopify's staged upload maps
+   each one to its mime type. */
+
+const EXTENSIONS = ['webp', 'jpg', 'jpeg', 'png']
+
+const photoPath = (category, name, ext) => `/assets/products/${category}/${name}.${ext}`
 const onDisk = (path) => existsSync(join(ROOT, 'public', path))
+
+/** First existing file for `name`, or null. */
+function findPhoto(category, name) {
+  for (const ext of EXTENSIONS) {
+    const path = photoPath(category, name, ext)
+    if (onDisk(path)) return path
+  }
+  return null
+}
 
 function resolvePhotos(sku, category) {
   const stem = sku.toLowerCase()
-  const main = photoPath(category, stem)
-  if (!onDisk(main)) return { image: null, gallery: null }
+  const main = findPhoto(category, stem)
+  if (!main) return { image: null, gallery: null }
 
   const gallery = []
   for (let i = 2; ; i++) {
-    const angle = photoPath(category, `${stem}-${i}`)
-    if (!onDisk(angle)) break
+    const angle = findPhoto(category, `${stem}-${i}`)
+    if (!angle) break
     gallery.push(angle)
   }
   return { image: main, gallery: gallery.length ? gallery : null }
