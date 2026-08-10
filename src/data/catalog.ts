@@ -362,7 +362,7 @@ export const PRODUCTS: Product[] = [
     weight: '1.9 Grams',
     dimensions: '4.5 mm',
     tone: 'gold',
-    image: '/assets/products/earrings/gmd-er-ld-hex-yg101.jpg',
+    image: '/assets/products/earrings/gmd-er-ld-hex-yg101.webp',
     madeToOrder: true,
     subtitle: '1.01 CTW hexagon cluster · 10K yellow gold',
     description: 'Refined and timeless, these 10K Yellow Gold Lab Diamond Hexagon Cluster Stud Earrings are crafted in genuine 10K Yellow Gold and feature 1.01 total carats of premium F-G Color VS1-VS2 Lab-Grown Diamonds. The elegant hexagon cluster design maximizes brilliance, creating the appearance of a larger center stone while maintaining a sleek, modern silhouette. Lightweight at just 1.9 grams, these earrings are designed for all-day comfort without sacrificing luxury. Whether worn alone or paired with other fine jewelry, they provide the perfect finishing touch for any occasion.',
