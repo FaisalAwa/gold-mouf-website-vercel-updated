@@ -3,12 +3,10 @@
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
   "headers": [
     {
-      "comment": "Vite's build output is content-hashed, so a new file means a new name.",
       "source": "/assets/((?!products/).*)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     },
     {
-      "comment": "Product photos are named after their SKU, not their contents, so re-shooting a piece reuses the filename. Immutable here would pin a returning visitor to last year's photo. Revalidate instead — a 304 costs one cheap round-trip.",
       "source": "/assets/products/(.*)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
     }

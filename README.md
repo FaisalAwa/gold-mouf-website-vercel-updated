@@ -77,4 +77,16 @@ Remove the Shopify store password (Online Store → Preferences → Restrict acc
 Lighthouse/axe.
 
 ## Deploy
-Vercel. `vercel.json` provides SPA rewrites + immutable `/assets/**` caching.
+Vercel. `vercel.json` provides SPA rewrites plus two cache rules, kept
+mutually exclusive by a negative lookahead rather than by match order:
+
+- `/assets/((?!products/).*)` — immutable for a year. Vite content-hashes its
+  build output, so new contents always mean a new filename.
+- `/assets/products/(.*)` — `max-age=0, must-revalidate`. Product photos are
+  named after their SKU, not their contents, so re-shooting a piece reuses the
+  filename. Immutable here would pin a returning visitor to last year's photo,
+  and no later deploy could reach them. An unchanged photo costs a 304.
+
+`vercel.json` is validated against `additionalProperties: false` — an unknown
+key (a `comment`, say) fails the deployment and Vercel silently keeps serving
+the last good build.
