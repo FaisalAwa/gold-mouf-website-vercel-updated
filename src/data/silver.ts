@@ -3,8 +3,8 @@
    THE SPINE: the price moves with the real silver spot.
 
    Source of truth (all consumers share ONE store):
-   • Real feed when VITE_METALS_API_KEY is set — metals.dev, USD/oz.
-     QUOTA-SAFE: the free key is 100 req/MONTH, so we fetch at most
+   • Real feed when VITE_METALS_API_KEY is set — metals-api.com, USD/oz.
+     QUOTA-SAFE: the free key is 50 req/MONTH, so we fetch at most
      once per TTL and cache the result in localStorage. Reloads read
      the cache (0 API calls); change% is computed vs the previous
      cached fetch, so it stays a real number. Prices, hero readout,
@@ -39,10 +39,10 @@ type MetalKey = MetalQuote['key']
 // Session-open seeds (USD/oz). Silver first — it is the headline metal.
 // In real mode these are only the ~1s placeholder before the first fetch.
 const SEEDS: Record<MetalKey, { label: string; symbol: string; price: number; drift: number }> = {
-  silver: { label: 'Silver', symbol: 'XAG', price: 34.62, drift: 0.05 },
-  gold: { label: 'Gold', symbol: 'XAU', price: 2418.0, drift: 1.4 },
-  platinum: { label: 'Platinum', symbol: 'XPT', price: 1012.0, drift: 0.9 },
-  palladium: { label: 'Palladium', symbol: 'XPD', price: 1128.0, drift: 1.1 },
+  silver: { label: 'Silver', symbol: 'XAG', price: 64.78, drift: 0.09 },
+  gold: { label: 'Gold', symbol: 'XAU', price: 4381.3, drift: 2.6 },
+  platinum: { label: 'Platinum', symbol: 'XPT', price: 1733.0, drift: 1.5 },
+  palladium: { label: 'Palladium', symbol: 'XPD', price: 1342.0, drift: 1.3 },
 }
 
 const ORDER: MetalKey[] = ['silver', 'gold', 'platinum', 'palladium']
@@ -50,10 +50,13 @@ const ORDER: MetalKey[] = ['silver', 'gold', 'platinum', 'palladium']
 /* ── Live source config ──────────────────────────────────────────── */
 const API_KEY = ((import.meta.env.VITE_METALS_API_KEY as string | undefined) ?? '').trim()
 const SIM_INTERVAL_MS = 4200
-// Free tier is 100 req/MONTH. Fetch at most once per TTL, cache the rest.
-// 12h ⇒ ≤2 calls/day per browser (~60/mo worst case) — comfortably under 100.
-const CACHE_KEY = 'gmd_metals_v1'
-const CACHE_TTL_MS = 12 * 60 * 60 * 1000
+// Free tier is 50 req/MONTH. Fetch at most once per TTL, cache the rest.
+// 24h ⇒ ≤1 call/day per browser (~31/mo worst case) — under 50 with room to
+// spare. Spot moves far less than a day's worth between two page loads.
+// The key is bumped whenever the payload shape changes, so an old cache from
+// the metals.dev era can never be read back as if it were current.
+const CACHE_KEY = 'gmd_metals_v2'
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000
 
 function nextTick(open: number, current: number, drift: number): number {
   // bounded random walk that gently mean-reverts toward session open (±2.2%)
@@ -65,22 +68,34 @@ function nextTick(open: number, current: number, drift: number): number {
   return Math.min(hi, Math.max(lo, next))
 }
 
-/** metals.dev latest → USD/oz for our four metals, or null on any failure. */
+// metals-api quotes against USD, so `rates.XAG` is ounces-per-dollar. Paid
+// plans also mirror the inverse as `USDXAG`; free ones may not, so take that
+// when it is there and reciprocate the rate when it is not.
+const SYMBOL: Record<MetalKey, string> = {
+  silver: 'XAG',
+  gold: 'XAU',
+  platinum: 'XPT',
+  palladium: 'XPD',
+}
+
+/** metals-api latest → USD/oz for our four metals, or null on any failure. */
 async function fetchSpot(key: string): Promise<Record<MetalKey, number> | null> {
   try {
-    const url = `https://api.metals.dev/v1/latest?api_key=${encodeURIComponent(key)}&currency=USD&unit=toz`
+    const symbols = ORDER.map((k) => SYMBOL[k]).join(',')
+    const url = `https://metals-api.com/api/latest?access_key=${encodeURIComponent(key)}&base=USD&symbols=${symbols}`
     const res = await fetch(url)
     if (!res.ok) return null
-    const json = (await res.json()) as { metals?: Record<string, number> }
-    const m = json.metals
-    if (!m) return null
-    const out = {
-      silver: m.silver,
-      gold: m.gold,
-      platinum: m.platinum,
-      palladium: m.palladium,
-    } as Record<MetalKey, number>
-    for (const k of ORDER) if (!Number.isFinite(out[k])) return null
+    // The API answers 200 with `success:false` on a bad key or a spent quota.
+    const json = (await res.json()) as { success?: boolean; rates?: Record<string, number> }
+    const r = json.rates
+    if (json.success === false || !r) return null
+    const out = {} as Record<MetalKey, number>
+    for (const k of ORDER) {
+      const sym = SYMBOL[k]
+      const direct = r[`USD${sym}`]
+      out[k] = Number.isFinite(direct) && direct > 0 ? direct : 1 / r[sym]
+    }
+    for (const k of ORDER) if (!Number.isFinite(out[k]) || out[k] <= 0) return null
     return out
   } catch {
     return null
