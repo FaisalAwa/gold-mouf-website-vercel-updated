@@ -86,18 +86,26 @@ export function Footer() {
           <span style={{ display: 'flex', gap: 18, alignItems: 'center' }}>
             <Link to="/legal/privacy" style={{ color: 'inherit' }}>Privacy</Link>
             <Link to="/legal/terms" style={{ color: 'inherit' }}>Terms</Link>
-            {/* Build credit — sits with the legal row so it reads as a footnote,
-                not as another piece of site navigation. */}
-            <span>
-              Built by{' '}
-              {/* Full-brightness against the muted row so the name reads as the
-                  link. --c-accent is darker than the surrounding text here and
-                  would dim it instead. */}
-              <a href="https://wavesmvmnt.com" target="_blank" rel="noreferrer" style={{ color: 'var(--c-on-dark)' }}>
-                Waves
-              </a>
-            </span>
           </span>
+        </div>
+
+        {/* Build credit — centred on its own line, last thing on the page, so
+            it reads as a signature rather than as another footer link. */}
+        <div
+          style={{
+            textAlign: 'center',
+            paddingTop: 'var(--s-sm)',
+            fontSize: 'var(--t-small)',
+            color: 'var(--c-on-dark-muted)',
+          }}
+        >
+          Built by{' '}
+          {/* Full-brightness against the muted line so the name reads as the
+              link. --c-accent is darker than the surrounding text here and
+              would dim it instead. */}
+          <a href="https://wavesmvmnt.com" target="_blank" rel="noreferrer" style={{ color: 'var(--c-on-dark)' }}>
+            Waves
+          </a>
         </div>
       </div>
     </footer>
