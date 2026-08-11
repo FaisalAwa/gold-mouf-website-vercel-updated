@@ -7,6 +7,7 @@ const col: React.CSSProperties = { display: 'flex', flexDirection: 'column', gap
 const head: React.CSSProperties = {
   fontFamily: 'var(--f-head)',
   fontSize: 'var(--t-label)',
+  fontWeight: 700,
   letterSpacing: '0.18em',
   textTransform: 'uppercase',
   color: 'var(--c-accent)',
@@ -67,12 +68,6 @@ export function Footer() {
             <span style={head}>Reach us</span>
             <a href={`mailto:${SITE.contact.email}`} style={link}>{SITE.contact.email}</a>
             <a href={SITE.contact.phoneHref} style={link}>{SITE.contact.phone}</a>
-            <a href={SITE.socials.instagram.href} target="_blank" rel="noreferrer" style={link}>
-              Instagram {SITE.socials.instagram.label}
-            </a>
-            <a href={SITE.socials.tiktok.href} target="_blank" rel="noreferrer" style={link}>
-              TikTok {SITE.socials.tiktok.label}
-            </a>
           </div>
         </div>
 
@@ -88,9 +83,20 @@ export function Footer() {
           }}
         >
           <span>© {year} {SITE.legalName}. Based in {SITE.base} · roots in {SITE.foundedCity} since {SITE.established}.</span>
-          <span style={{ display: 'flex', gap: 18 }}>
+          <span style={{ display: 'flex', gap: 18, alignItems: 'center' }}>
             <Link to="/legal/privacy" style={{ color: 'inherit' }}>Privacy</Link>
             <Link to="/legal/terms" style={{ color: 'inherit' }}>Terms</Link>
+            {/* Build credit — sits with the legal row so it reads as a footnote,
+                not as another piece of site navigation. */}
+            <span>
+              Built by{' '}
+              {/* Full-brightness against the muted row so the name reads as the
+                  link. --c-accent is darker than the surrounding text here and
+                  would dim it instead. */}
+              <a href="https://wavesmvmnt.com" target="_blank" rel="noreferrer" style={{ color: 'var(--c-on-dark)' }}>
+                Waves
+              </a>
+            </span>
           </span>
         </div>
       </div>
