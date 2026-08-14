@@ -327,19 +327,23 @@
 }
 
 /* ── GrillReveal: 3D scroll-driven signature moment ────────────── */
-/* Mobile-first: static, already-revealed grill + hooks stacked in flow.
-   The desktop block below adds the pinned 100vh stage + 3D perspective. */
+/* Same pinned, 3D-perspective, cross-fading-panel treatment on every
+   viewport — see GrillReveal.tsx for the matching GSAP matchMedia gate
+   (prefers-reduced-motion only; no width/pointer split anymore). */
 .gmd-grill {
   background: var(--c-dark-2);
   color: var(--c-on-dark);
-  padding: var(--s-lg) 0;
+  min-height: 100vh;
+  padding: 0;
+  display: flex;
+  align-items: center;
   overflow: hidden;               /* clip the light-sweep + any 3D overflow */
 }
 .gmd-grill-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--s-sm);
+  gap: var(--s-md);
   text-align: center;
 }
 .gmd-grill-head { max-width: 620px; }
@@ -348,6 +352,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  perspective: 1200px;
 }
 .gmd-grill-3d {
   position: relative;
@@ -377,12 +382,15 @@
 .gmd-grill-panels {
   position: relative;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--s-sm);
+  display: block;
+  min-height: 150px;
 }
-.gmd-grill-panel { max-width: 560px; }
+.gmd-grill-panel {
+  position: absolute;
+  inset: 0;
+  margin: 0 auto;
+  max-width: 560px;
+}
 .gmd-grill-step {
   display: block;
   font-family: var(--f-head);
@@ -429,26 +437,4 @@
 }
 @media (min-width: 760px) {
   .gmd-grill-steps { grid-template-columns: repeat(3, 1fr); }
-}
-
-/* Desktop (fine pointer): pinned full-height stage, 3D perspective, and
-   the three panels absolute-stacked so they cross-fade in place. */
-@media (min-width: 768px) and (pointer: fine) {
-  .gmd-grill {
-    min-height: 100vh;
-    padding: 0;
-    display: flex;
-    align-items: center;
-  }
-  .gmd-grill-inner { gap: var(--s-md); }
-  .gmd-grill-viewport { perspective: 1200px; }
-  .gmd-grill-panels {
-    display: block;
-    min-height: 150px;
-  }
-  .gmd-grill-panel {
-    position: absolute;
-    inset: 0;
-    margin: 0 auto;
-  }
 }

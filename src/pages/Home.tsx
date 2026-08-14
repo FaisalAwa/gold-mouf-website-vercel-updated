@@ -236,7 +236,7 @@ export default function Home() {
           >
             {/* interactive 3D grill — drag to spin (no auto-rotation) */}
             <div className="gmd-builder-grill">
-              <HeroGrillStage autoRotate={false} />
+              <HeroGrillStage autoRotate={false} teeth={preset.teeth} />
             </div>
             <div style={{ textAlign: 'center' }}>
               <span style={{ ...LABEL, color: 'var(--c-accent)' }}>{preset.label}</span>

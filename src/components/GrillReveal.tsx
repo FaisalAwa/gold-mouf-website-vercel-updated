@@ -7,16 +7,13 @@
    GSAP only (no Framer Motion). ScrollTrigger is registered globally in
    main.tsx — we only import + use it here. Transform + opacity only (GPU).
 
-   The pin + scrub ONLY runs at the same breakpoint the CSS builds the 3D
-   staged layout for: desktop width + fine pointer (see the "gmd-grill"
-   media query in home.css). Below that — mobile/touch, any width, or
-   reduced-motion — gsap.matchMedia() never fires this block, so the
-   section stays the default already-revealed, statically stacked CSS
-   layout. Without this gate the timeline used to run everywhere (only
-   reduced-motion was excluded), pinning the section and driving panel
-   opacity/position on mobile even though the mobile CSS never switches
-   the panels to the absolute-stacked layout the animation assumes —
-   that mismatch is what made it "behave like shit" on phones.
+   The pin + scrub runs on every viewport now — the "gmd-grill" CSS in
+   home.css builds the pinned, 3D-perspective, absolute-stacked-panel
+   layout unconditionally (no width/pointer split), so this matchMedia
+   gate only needs to respect prefers-reduced-motion. 'transform' pinType
+   (below) keeps mobile Safari's dynamic address bar from jittering the
+   pin, and touch scroll drives ScrollTrigger the same way native scroll
+   does on desktop (see main.tsx — Lenis is desktop-only).
    ═══════════════════════════════════════════════════════════════ */
 
 import { useLayoutEffect, useRef } from 'react'
@@ -41,8 +38,8 @@ export function GrillReveal() {
   useLayoutEffect(() => {
     const mm = gsap.matchMedia()
 
-    // Matches the desktop-staged CSS in home.css exactly — see file header.
-    mm.add('(min-width: 768px) and (pointer: fine) and (prefers-reduced-motion: no-preference)', () => {
+    // Matches the (now-unconditional) staged CSS in home.css — see file header.
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
       const [p0, p1, p2] = panelsRef.current
 
       // Initial hidden states — applied before paint, so no flash on desktop.

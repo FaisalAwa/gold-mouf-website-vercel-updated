@@ -31,7 +31,7 @@ const PROCESS = [
 
 /* real customers, worn in the city — authentic UGC, not renders */
 const WORN = [
-  { src: '/assets/story/lifestyle.webp', alt: 'A GoldMoufDog customer wearing an iced Cuban link out in the city' },
+  { src: '/assets/story/lifestyle.png', alt: 'A GoldMoufDog customer wearing an iced Cuban link out in the city' },
   { src: '/assets/story/lifestyle-2.webp', alt: 'A GoldMoufDog customer wearing a custom grill and chain' },
 ]
 
