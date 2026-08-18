@@ -35,7 +35,7 @@ function Poster() {
   )
 }
 
-export function HeroGrillStage({ autoRotate = false, teeth }: { autoRotate?: boolean; teeth?: number }) {
+export function HeroGrillStage({ autoRotate = false }: { autoRotate?: boolean }) {
   const [use3D, setUse3D] = useState(false)
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export function HeroGrillStage({ autoRotate = false, teeth }: { autoRotate?: boo
     <div className="gmd-hero3d-stage">
       {use3D ? (
         <Suspense fallback={<Poster />}>
-          <Hero3D autoRotate={autoRotate} teeth={teeth} />
+          <Hero3D autoRotate={autoRotate} />
         </Suspense>
       ) : (
         <Poster />

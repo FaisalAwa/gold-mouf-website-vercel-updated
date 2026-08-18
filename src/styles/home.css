@@ -319,11 +319,13 @@
 /* ── Shared button row ─────────────────────────────────────────── */
 .gmd-btn-row { display: flex; flex-wrap: wrap; gap: 12px; }
 
-/* Signature-pieces feature block (brief homepage priority) */
-.gmd-home-signature { display: grid; grid-template-columns: 1fr; gap: var(--s-md); align-items: center; }
-.gmd-home-signature-cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-xs); }
+/* Signature-pieces feature block (brief homepage priority) — heading/copy on
+   top, full-width card grid below (matches the Bestsellers layout above it). */
+.gmd-home-signature { display: grid; grid-template-columns: 1fr; gap: var(--s-md); }
+.gmd-home-signature > :first-child { max-width: 620px; }
+.gmd-home-signature-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s-xs); }
 @media (min-width: 900px) {
-  .gmd-home-signature { grid-template-columns: 0.9fr 1.1fr; gap: var(--s-lg); }
+  .gmd-home-signature-cards { grid-template-columns: repeat(4, 1fr); }
 }
 
 /* ── GrillReveal: 3D scroll-driven signature moment ────────────── */
@@ -333,7 +335,7 @@
 .gmd-grill {
   background: var(--c-dark-2);
   color: var(--c-on-dark);
-  min-height: 100vh;
+  min-height: 100svh;
   padding: 0;
   display: flex;
   align-items: center;

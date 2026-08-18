@@ -7,6 +7,11 @@
    the model fails to load, it falls back to the framed-photo plaque.
    Lazy-loaded on any WebGL device (see HeroGrill.tsx); the static
    poster renders on no-WebGL / reduced-motion.
+
+   The only real scan the shop has is the 10 × 10 set, so every preset
+   (6×6, 8×8, 10×10, 12×12, Full Set) shows that same scanned model —
+   no per-size procedural stand-in, so nothing looks like a different
+   (lower-fidelity) asset depending on which preset is picked.
    ═══════════════════════════════════════════════════════════════ */
 import { Component, Suspense, useRef, type ReactNode } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
@@ -29,52 +34,15 @@ const MODEL_SRC = '/assets/grill/grill.glb'
 const GRILL_IMG = '/assets/grill/hero.webp'
 const IMG_RATIO = 1600 / 1072
 
-/* The real GLB was scanned from the shop's actual 10 × 10 (20-tooth) set —
-   that exact tooth count gets the high-fidelity scan. Every other preset
-   renders a procedural chrome grill built to match its tooth count, reusing
-   the same monochrome material so it doesn't read as a different asset. */
-const REAL_SCAN_TEETH = 20
-
-/* ── The real scanned 3D model (only for the 10 × 10 preset) ────── */
+/* ── The real scanned 3D model — used for every preset ───────────── */
 function RealGrillScan() {
   const { scene } = useGLTF(MODEL_SRC)
   return <primitive object={scene} />
 }
 useGLTF.preload(MODEL_SRC)
 
-/* ── Procedural grill — arranges chrome teeth to match a tooth count
-   so every preset (6×6, 8×8, 12×12, Full Set) visibly differs ──── */
-function ProceduralGrillModel({ teeth }: { teeth: number }) {
-  const topCount = Math.ceil(teeth / 2)
-  const bottomCount = teeth - topCount
-  const rowGap = 1.05
-
-  const buildRow = (count: number, y: number, curveSign: number) => {
-    const spread = 0.3 + count * 0.05
-    return Array.from({ length: count }, (_, i) => {
-      const t = count === 1 ? 0 : (i / (count - 1)) * 2 - 1
-      const x = t * spread
-      const arch = curveSign * (1 - t * t) * 0.14
-      const toothW = 0.1
-      const toothH = 0.32 - Math.abs(t) * 0.04
-      return (
-        <RoundedBox key={`${y}-${i}`} args={[toothW, toothH, 0.16]} radius={0.028} smoothness={3} position={[x, y + arch, 0]}>
-          <meshStandardMaterial color="#d7dade" metalness={1} roughness={0.14} envMapIntensity={1.2} />
-        </RoundedBox>
-      )
-    })
-  }
-
-  return (
-    <group>
-      {buildRow(topCount, rowGap / 2, -1)}
-      {buildRow(bottomCount, -rowGap / 2, 1)}
-    </group>
-  )
-}
-
-/* ── Model stage — swaps scan vs. procedural, shared drag/float rig ─ */
-function GrillModel({ autoRotate, teeth }: { autoRotate: boolean; teeth: number }) {
+/* ── Model stage — shared drag/float rig ─────────────────────────── */
+function GrillModel({ autoRotate }: { autoRotate: boolean }) {
   const ref = useRef<THREE.Group>(null)
   // optional slow turntable; off by default (drag-only)
   useFrame((_, delta) => {
@@ -83,7 +51,9 @@ function GrillModel({ autoRotate, teeth }: { autoRotate: boolean; teeth: number 
   return (
     <group ref={ref} position={[0, -0.05, 0]}>
       <Center>
-        <Resize>{teeth === REAL_SCAN_TEETH ? <RealGrillScan /> : <ProceduralGrillModel teeth={teeth} />}</Resize>
+        <Resize>
+          <RealGrillScan />
+        </Resize>
       </Center>
     </group>
   )
@@ -121,7 +91,7 @@ class ModelBoundary extends Component<{ children: ReactNode }, { failed: boolean
   }
 }
 
-export default function Hero3D({ autoRotate = false, teeth = REAL_SCAN_TEETH }: { autoRotate?: boolean; teeth?: number }) {
+export default function Hero3D({ autoRotate = false }: { autoRotate?: boolean }) {
   return (
     <Canvas
       camera={{ position: [0, 0, 4.4], fov: 42 }}
@@ -137,11 +107,11 @@ export default function Hero3D({ autoRotate = false, teeth = REAL_SCAN_TEETH }: 
             is (observe = re-fit on resize), so the grill reads correctly
             whether the stage is wide (desktop) or narrow/short (mobile),
             instead of relying on one fixed scale + fov for every viewport. */}
-        <Bounds fit clip observe margin={1.2} key={teeth}>
+        <Bounds fit clip observe margin={1.2}>
           <PresentationControls global snap polar={[-0.25, 0.25]} azimuth={[-0.6, 0.6]}>
             <Float speed={1.1} rotationIntensity={0.25} floatIntensity={0.5}>
               <ModelBoundary>
-                <GrillModel autoRotate={autoRotate} teeth={teeth} />
+                <GrillModel autoRotate={autoRotate} />
               </ModelBoundary>
             </Float>
           </PresentationControls>

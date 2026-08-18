@@ -67,6 +67,25 @@ function HeroCatchphrase({ phrases }: { phrases: string[] }) {
   )
 }
 
+/* small arrow that nudges right on a loop — used on the "Browse" CTA */
+function NudgeArrow() {
+  const reduce = useReducedMotion()
+  return (
+    <motion.svg
+      width={15}
+      height={15}
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden
+      style={{ marginLeft: 2, verticalAlign: -2 }}
+      animate={reduce ? undefined : { x: [0, 4, 0] }}
+      transition={reduce ? undefined : { duration: 1.3, repeat: Infinity, ease: 'easeInOut' }}
+    >
+      <path d="M1 8h12M9 4l4 4-4 4" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" />
+    </motion.svg>
+  )
+}
+
 /* small uppercase meta label, reused across sections */
 const LABEL: CSSProperties = {
   fontFamily: 'var(--f-head)',
@@ -181,7 +200,7 @@ export default function Home() {
               <Eyebrow>Start here</Eyebrow>
               <Heading level={2} style={{ marginTop: 12 }}>Three ways in</Heading>
             </div>
-            <Btn to="/shop" variant="ghost">Browse everything</Btn>
+            <Btn to="/shop" variant="ghost">Browse<NudgeArrow /></Btn>
           </div>
         </Reveal>
         <div className="gmd-home-trio">
@@ -236,7 +255,7 @@ export default function Home() {
           >
             {/* interactive 3D grill — drag to spin (no auto-rotation) */}
             <div className="gmd-builder-grill">
-              <HeroGrillStage autoRotate={false} teeth={preset.teeth} />
+              <HeroGrillStage autoRotate={false} />
             </div>
             <div style={{ textAlign: 'center' }}>
               <span style={{ ...LABEL, color: 'var(--c-accent)' }}>{preset.label}</span>
