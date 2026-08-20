@@ -74,6 +74,66 @@ const DOCS: Record<LegalDoc, Doc> = {
       },
     ],
   },
+  'return-policy': {
+    title: 'Return Policy',
+    intro:
+      'Effective Date: August 18, 2026. GoldMoufDog Custom Grillz & Jewelry — please read this policy in full before placing an order.',
+    blocks: [
+      {
+        h: '1. All sales are final',
+        p: 'All sales made through GoldMoufDog Custom Grillz & Jewelry are final. Due to the custom nature of our products, we do not accept returns, exchanges, refunds, or cancellations once an order has been placed and payment has been processed. Each item is custom-made specifically for the customer based on their design choices, measurements, impressions, and approvals. Because of this, all purchases are considered permanent and non-refundable.',
+      },
+      {
+        h: '2. Custom orders',
+        p: 'All Grillz and jewelry pieces are made-to-order and customized per customer specifications. This includes, but is not limited to:',
+        list: ['Custom designs', 'Stone settings', 'Engravings', 'Metal selection', 'CAD approvals', 'Dental impressions'],
+      },
+      {
+        p: 'Once production has begun, no changes, cancellations, or refunds will be permitted under any circumstances.',
+      },
+      {
+        h: '3. Deposits & payments',
+        p: 'All deposits and payments are non-refundable. This includes initial deposits, partial payments, and full payments made toward any order. Deposits secure materials, labor, design time, and production scheduling and are not eligible for return or credit.',
+      },
+      {
+        h: '4. No returns or exchanges',
+        p: 'Because each product is custom-made, we do not accept returns or exchanges for any reason, including but not limited to:',
+        list: [
+          'Change of mind',
+          'Incorrect sizing provided by the customer',
+          'Customer dissatisfaction with design choices approved prior to production',
+          'Delays in production or shipping',
+          'Natural variations in handcrafted items',
+        ],
+      },
+      {
+        h: '5. Impressions & customer responsibility',
+        p: 'Customers are fully responsible for providing accurate and usable dental impressions for Grillz orders. If an impression is incorrect, damaged, or unusable, the customer may be required to submit a new impression at their own expense. This does not qualify for a refund or cancellation.',
+      },
+      {
+        h: '6. Order cancellations',
+        p: 'Once an order has been placed and payment has been received, it cannot be canceled. Production may begin immediately after order confirmation, and all materials and labor are allocated specifically to the customer’s piece.',
+      },
+      {
+        h: '7. Damaged or defective items',
+        p: 'In the rare event that an item arrives damaged due to shipping, customers must contact the shipping carrier to file a claim. GoldMoufDog Custom Grillz & Jewelry is not responsible for damage caused during shipping, handling, or delivery once the package has left our facility.',
+      },
+      {
+        h: '8. Customer acknowledgment',
+        p: 'By placing an order, the customer acknowledges and agrees that:',
+        list: [
+          'All sales are final',
+          'No refunds, returns, or exchanges will be issued',
+          'All custom items are made specifically to order',
+          'The customer has reviewed and approved all design details prior to production',
+        ],
+      },
+      {
+        h: '9. Policy agreement',
+        p: 'By completing a purchase with GoldMoufDog Custom Grillz & Jewelry, the customer agrees to all terms outlined in this Return Policy. We appreciate your trust in GoldMoufDog Custom Grillz & Jewelry and are committed to delivering high-quality custom pieces made just for you.',
+      },
+    ],
+  },
   privacy: {
     title: 'Privacy Policy',
     intro:
@@ -160,6 +220,7 @@ const DOCS: Record<LegalDoc, Doc> = {
 const INDEX: { slug: LegalDoc; label: string }[] = [
   { slug: 'grillz-policy', label: 'Grillz Policy' },
   { slug: 'jewelry-policy', label: 'Jewelry Policy' },
+  { slug: 'return-policy', label: 'Return Policy' },
   { slug: 'shipping', label: 'Shipping' },
   { slug: 'privacy', label: 'Privacy Policy' },
   { slug: 'terms', label: 'Terms of Service' },

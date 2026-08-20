@@ -62,6 +62,7 @@ export function Footer() {
             <Link to="/contact" style={link}>Contact</Link>
             <Link to="/legal/grillz-policy" style={link}>Grillz Policy</Link>
             <Link to="/legal/jewelry-policy" style={link}>Jewelry Policy</Link>
+            <Link to="/legal/return-policy" style={link}>Return Policy</Link>
             <Link to="/legal/shipping" style={link}>Shipping</Link>
           </div>
           <div style={col}>

@@ -594,7 +594,7 @@ export const PRODUCTS: Product[] = [
     collection: 'GoldMoufDog Elite Collection',
     price: 1500,
     metal: '925 Silver',
-    metalDetail: '925 sterling silver · black rhodium plated',
+    metalDetail: '925 sterling silver · rhodium plated',
     finish: 'Iced (Moissanite VVS)',
     stones: 'Black round brilliant moissanite',
     weight: '220–260 grams',
@@ -604,8 +604,8 @@ export const PRODUCTS: Product[] = [
     madeToOrder: true,
     bestseller: true,
     subtitle: '12 mm closed-link Cuban · 24 inch',
-    description: 'Turn heads with the Black Moissanite Closed Link Cuban Chain, crafted from genuine 925 Sterling Silver and finished in a sleek black rhodium plating. Measuring 12mm wide and 24 inches long, this chain is fully hand-set with premium black round brilliant moissanite stones, delivering a bold, modern look with exceptional brilliance. The closed-link Cuban design creates a seamless appearance, while the secure double safety box clasp ensures durability for everyday wear. Whether worn alone or paired with a pendant, this luxury chain is designed for those who appreciate distinctive craftsmanship and standout style.',
-    highlights: ['Closed-link Cuban, every link hand-set', 'Black round brilliant moissanite', '925 sterling silver · black rhodium plated', '12 mm wide · 24 in · double safety box clasp'],
+    description: 'Turn heads with the Black Moissanite Closed Link Cuban Chain, crafted from genuine 925 Sterling Silver and finished in a bright rhodium plating. Measuring 12mm wide and 24 inches long, this chain is fully hand-set with premium black round brilliant moissanite stones against the silver metal, delivering a bold, high-contrast look with exceptional brilliance. The closed-link Cuban design creates a seamless appearance, while the secure double safety box clasp ensures durability for everyday wear. Whether worn alone or paired with a pendant, this luxury chain is designed for those who appreciate distinctive craftsmanship and standout style.',
+    highlights: ['Closed-link Cuban, every link hand-set', 'Black round brilliant moissanite on silver metal', '925 sterling silver · rhodium plated', '12 mm wide · 24 in · double safety box clasp'],
   },
 
   /* ── WATCHES · custom G-SHOCK — 7 SKUs, 7 with photography ── */

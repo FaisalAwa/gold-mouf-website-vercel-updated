@@ -43,4 +43,4 @@ export const POLICY = {
   shipping: 'Insured shipping. International orders welcome.',
 } as const
 
-export type LegalDoc = 'grillz-policy' | 'jewelry-policy' | 'privacy' | 'terms' | 'shipping'
+export type LegalDoc = 'grillz-policy' | 'jewelry-policy' | 'return-policy' | 'privacy' | 'terms' | 'shipping'
